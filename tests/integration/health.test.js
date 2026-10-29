@@ -149,7 +149,7 @@ describe('Application Bootstrap & Access Control Baselines', () => {
     expect(res.text).toContain('id="auth-prompt-confirm"');
   });
 
-  it('renders footer community social icons for Instagram, TikTok, Twitter, YouTube and removes Discord', async () => {
+  it('renders footer community social icons and removes Discord and logistics hubs', async () => {
     const res = await request(app).get('/');
     expect(res.status).toBe(200);
     expect(res.text).toContain('aria-label="Instagram"');
@@ -158,6 +158,8 @@ describe('Application Bootstrap & Access Control Baselines', () => {
     expect(res.text).toContain('aria-label="YouTube"');
     expect(res.text).not.toContain('aria-label="Discord"');
     expect(res.text).not.toContain('>DC<');
+    expect(res.text).not.toContain('Logistics Hubs');
+    expect(res.text).not.toContain('Berlin Terminal');
   });
 
   it('renders home street slideshow strip including Manila and Beijing street looks', async () => {
