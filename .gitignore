@@ -26,6 +26,9 @@ scratch/
 .DS_Store
 Thumbs.db
 
+# Documentation
+docs/
+
 # AI tooling, agent configurations & rules
 .agents/
 AGENTS.md
