@@ -25,3 +25,18 @@ scratch/
 # OS-generated files
 .DS_Store
 Thumbs.db
+
+# AI tooling, agent configurations & rules
+.agents/
+AGENTS.md
+.gemini/
+.claude/
+CLAUDE.md
+.cursor/
+.cursorrules
+.windsurf/
+.windsurfrules
+.copilot/
+COPILOT.md
+.chatgpt/
+
