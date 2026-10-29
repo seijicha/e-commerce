@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'GlitchAttire' %></title>
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/pages.css">
+  <%- style %>
+</head>
+<body>
+  <div class="auth-shell">
+    <div class="auth-card">
+      <div style="text-align: center; margin-bottom: var(--space-4);">
+        <a href="/" class="brand-logo brand-logo--auth" style="justify-content: center;" aria-label="GLITCH ATTIRE">
+          <img src="/logo/logo.png" alt="GLITCH ATTIRE" class="brand-logo__img" />
+        </a>
+      </div>
+
+      <%- include('../partials/flash') %>
+      <%- body %>
+    </div>
+  </div>
+
+  <script type="module" src="/js/main.js"></script>
+  <%- script %>
+</body>
+</html>

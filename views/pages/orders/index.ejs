@@ -1,0 +1,59 @@
+<div style="margin-bottom: 2rem;">
+  <h1 style="font-size: 2.25rem; margin-bottom: 0.5rem;">My Orders</h1>
+  <p style="color: var(--color-muted);">Track your recent garment purchases and delivery progress.</p>
+</div>
+
+<% if (typeof orders !== 'undefined' && orders.length > 0) { %>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Date</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.forEach(function(order) { %>
+          <tr>
+            <td>
+              <a href="/orders/<%= order.id %>" style="font-family: var(--font-display); font-weight: 700; color: var(--color-accent-alt);">
+                <%= order.order_number %>
+              </a>
+            </td>
+            <td><%= new Date(order.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
+            <td><%= order.item_count %> item(s)</td>
+            <td style="font-weight: 600;"><%= formatMoney(order.total) %></td>
+            <td>
+              <% if (order.status === 'delivered') { %>
+                <span class="badge badge--success">Delivered</span>
+              <% } else if (order.status === 'shipped') { %>
+                <span class="badge badge--cyan">Shipped</span>
+              <% } else if (order.status === 'paid') { %>
+                <span class="badge badge--cyan">Paid</span>
+              <% } else if (order.status === 'cancelled') { %>
+                <span class="badge badge--danger">Cancelled</span>
+              <% } else { %>
+                <span class="badge badge--warning">Pending</span>
+              <% } %>
+            </td>
+            <td style="text-align: right;">
+              <a href="/orders/<%= order.id %>" class="btn btn--outline btn--sm">View Detail</a>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+
+  <%- include('../../partials/pagination', { pagination }) %>
+<% } else { %>
+  <div style="text-align: center; padding: 4rem 1rem; background-color: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
+    <h3 style="margin-bottom: 0.5rem;">No orders found</h3>
+    <p style="color: var(--color-muted); margin-bottom: 1.5rem;">You have not placed any orders yet.</p>
+    <a href="/shop" class="btn btn--primary">Browse Catalog</a>
+  </div>
+<% } %>

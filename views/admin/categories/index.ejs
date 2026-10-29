@@ -1,0 +1,75 @@
+<div style="margin-bottom: 2rem;">
+  <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">Categories</h1>
+  <p style="color: var(--color-muted);">Organize apparel by collection or style categories.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+  <!-- Create Category Form -->
+  <div>
+    <div class="card">
+      <div class="card__header">
+        <h3 style="font-size: 1.15rem;">Add New Category</h3>
+      </div>
+      <div class="card__body">
+        <form action="/admin/categories" method="POST">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+          <div class="form-group">
+            <label for="name" class="form-label">Category Name <span class="required">*</span></label>
+            <input type="text" id="name" name="name" class="form-input" required placeholder="e.g. Outerwear & Jackets" />
+          </div>
+
+          <div class="form-group">
+            <label for="slug" class="form-label">Slug (Optional)</label>
+            <input type="text" id="slug" name="slug" class="form-input" placeholder="auto-generated from name" />
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--block">Create Category</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Existing Categories Table -->
+  <div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Slug</th>
+            <th>Created</th>
+            <th style="text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (categories && categories.length > 0) { %>
+            <% categories.forEach(function(cat) { %>
+              <tr>
+                <td style="font-weight: 600;"><%= cat.name %></td>
+                <td><code style="color: var(--color-muted);"><%= cat.slug %></code></td>
+                <td><%= new Date(cat.created_at).toLocaleDateString() %></td>
+                <td style="text-align: right;">
+                  <button
+                    type="button"
+                    class="btn btn--danger btn--sm"
+                    data-confirm
+                    data-action="/admin/categories/<%= cat.id %>"
+                    data-confirm-message="Delete category &quot;<%= cat.name %>&quot;? Deletion will be blocked if any products are assigned to it."
+                    title="Delete category"
+                  >
+                    ✕ Delete
+                  </button>
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr>
+              <td colspan="4" style="text-align: center; color: var(--color-muted); padding: 2rem;">No categories defined yet.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,149 @@
+<div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+  <div>
+    <a href="/orders" class="btn btn--secondary btn--sm" style="margin-bottom: 0.75rem; display: inline-flex; align-items: center; gap: 0.35rem;">
+      <svg class="icon icon--sm" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span>Back to Orders</span>
+    </a>
+    <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">Order #<%= order.order_number %></h1>
+    <p style="color: var(--color-muted); font-size: 0.9rem;">
+      Placed on <%= new Date(order.created_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) %>
+    </p>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 1rem;">
+    <% if (order.status === 'delivered') { %>
+      <span class="badge badge--success" style="font-size: 0.9rem; padding: 0.35rem 0.85rem;">Delivered</span>
+    <% } else if (order.status === 'shipped') { %>
+      <span class="badge badge--cyan" style="font-size: 0.9rem; padding: 0.35rem 0.85rem;">Shipped</span>
+    <% } else if (order.status === 'paid') { %>
+      <span class="badge badge--cyan" style="font-size: 0.9rem; padding: 0.35rem 0.85rem;">Paid</span>
+    <% } else if (order.status === 'cancelled') { %>
+      <span class="badge badge--danger" style="font-size: 0.9rem; padding: 0.35rem 0.85rem;">Cancelled</span>
+    <% } else { %>
+      <span class="badge badge--warning" style="font-size: 0.9rem; padding: 0.35rem 0.85rem;">Pending</span>
+    <% } %>
+
+    <% if (order.status === 'pending') { %>
+      <form action="/orders/<%= order.id %>/cancel" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <button
+          type="submit"
+          class="btn btn--danger btn--sm"
+          onclick="return confirm('Are you sure you want to cancel this order? Items will be restocked immediately.')"
+        >
+          Cancel Order
+        </button>
+      </form>
+    <% } %>
+  </div>
+</div>
+
+<div class="checkout-grid">
+  <!-- Items Snapshot -->
+  <div>
+    <div class="card">
+      <div class="card__header">
+        <h3 style="font-size: 1.15rem;">Ordered Items (<%= order.items.length %>)</h3>
+      </div>
+      <div class="card__body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Garment</th>
+                <th>Size</th>
+                <th>Unit Price</th>
+                <th>Qty</th>
+                <th style="text-align: right;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% order.items.forEach(function(item) { %>
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                      <% if (item.image_path) { %>
+                        <img src="<%= item.image_path %>" alt="<%= item.product_name %>" style="width: 44px; height: 52px; object-fit: cover; border-radius: var(--radius-sm);" />
+                      <% } %>
+                      <div>
+                        <% if (item.product_slug) { %>
+                          <a href="/shop/<%= item.product_slug %>" style="font-weight: 600; color: inherit;">
+                            <%= item.product_name %>
+                          </a>
+                        <% } else { %>
+                          <span style="font-weight: 600;"><%= item.product_name %></span>
+                        <% } %>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge badge--neutral"><%= item.size %></span>
+                  </td>
+                  <td><%= formatMoney(item.unit_price) %></td>
+                  <td><%= item.quantity %></td>
+                  <td style="text-align: right; font-weight: 700; color: var(--color-accent-alt);">
+                    <%= formatMoney(item.unit_price * item.quantity) %>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shipping & Totals Information -->
+  <div>
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <div class="card__header">
+        <h3 style="font-size: 1.15rem;">Shipping Address</h3>
+      </div>
+      <div class="card__body" style="font-size: 0.95rem; line-height: 1.6;">
+        <p><strong style="color: var(--color-text);"><%= order.shipping_name %></strong></p>
+        <p style="color: var(--color-muted);"><%= order.shipping_phone %></p>
+        <p style="color: var(--color-muted); margin-top: 0.5rem;"><%= order.shipping_address %></p>
+        <p style="color: var(--color-muted);"><%= order.shipping_city %>, <%= order.shipping_postal_code %></p>
+        <p style="color: var(--color-muted);"><%= order.shipping_country || 'Philippines' %></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <h3 style="font-size: 1.15rem;">Payment Summary</h3>
+      </div>
+      <div class="card__body" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <%
+          const paymentLabels = {
+            cod: 'Cash on Delivery (COD)',
+            gcash: 'GCash e-Wallet',
+            bank_transfer: 'Direct Bank Transfer'
+          };
+          const paymentLabel = paymentLabels[order.payment_method] || order.payment_method.toUpperCase();
+        %>
+        <div style="display: flex; justify-content: space-between; color: var(--color-muted);">
+          <span>Subtotal</span>
+          <span style="color: var(--color-text); font-weight: 600;"><%= formatMoney(order.subtotal || order.total) %></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; color: var(--color-muted);">
+          <span>Payment Method</span>
+          <span style="color: var(--color-text); font-weight: 600;"><%= paymentLabel %></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; color: var(--color-muted);">
+          <span>Shipping Fee</span>
+          <% if (parseFloat(order.shipping_fee) > 0) { %>
+            <span style="color: var(--color-text); font-weight: 600;"><%= formatMoney(order.shipping_fee) %></span>
+          <% } else { %>
+            <span style="color: var(--color-success); font-weight: 600;">FREE</span>
+          <% } %>
+        </div>
+        <div style="border-top: 1px solid var(--color-border); padding-top: 0.75rem; display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font-weight: 600;">Total Paid/Due</span>
+          <span style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--color-accent-alt);">
+            <%= formatMoney(order.total) %>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

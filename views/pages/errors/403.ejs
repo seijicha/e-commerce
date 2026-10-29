@@ -1,0 +1,11 @@
+<div style="text-align: center; padding: 4rem 1rem;">
+  <span class="badge badge--danger" style="margin-bottom: 1rem;">Access Forbidden (403)</span>
+  <h1 style="font-size: 3rem; margin-bottom: 1rem; color: var(--color-danger);">Restricted Clearance</h1>
+  <p style="color: var(--color-muted); max-width: 500px; margin: 0 auto 2rem; font-size: 1.1rem;">
+    <%= typeof message !== 'undefined' && message ? message : 'You do not have the necessary security authorization to access this sector.' %>
+  </p>
+  <div style="display: flex; justify-content: center; gap: 1rem;">
+    <a href="/" class="btn btn--primary">Return Home</a>
+    <a href="/login" class="btn btn--outline">Switch Account</a>
+  </div>
+</div>

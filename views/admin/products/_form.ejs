@@ -1,0 +1,218 @@
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+  <!-- Left: Main Information -->
+  <div>
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <div class="card__header">
+        <h3 style="font-size: 1.15rem;">Product Details</h3>
+      </div>
+      <div class="card__body">
+        <div class="form-group">
+          <label for="name" class="form-label">Product Name <span class="required">*</span></label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value="<%= typeof formData !== 'undefined' && formData.name ? formData.name : '' %>"
+            class="form-input <%= (typeof errors !== 'undefined' && errors.name) ? 'form-input--error' : '' %>"
+            required
+            placeholder="e.g. Cyber Glitch Oversized Hoodie"
+          />
+          <% if (typeof errors !== 'undefined' && errors.name) { %>
+            <p class="form-error"><%= errors.name.msg %></p>
+          <% } %>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label for="category_id" class="form-label">Category <span class="required">*</span></label>
+            <select
+              id="category_id"
+              name="category_id"
+              class="form-select <%= (typeof errors !== 'undefined' && errors.category_id) ? 'form-input--error' : '' %>"
+              required
+            >
+              <option value="">Select a Category</option>
+              <% categories.forEach(function(cat) { %>
+                <option
+                  value="<%= cat.id %>"
+                  <%= (typeof formData !== 'undefined' && String(formData.category_id) === String(cat.id)) ? 'selected' : '' %>
+                >
+                  <%= cat.name %>
+                </option>
+              <% }); %>
+            </select>
+            <% if (typeof errors !== 'undefined' && errors.category_id) { %>
+              <p class="form-error"><%= errors.category_id.msg %></p>
+            <% } %>
+          </div>
+
+          <div class="form-group">
+            <label for="price" class="form-label">Price (<%= currency %>) <span class="required">*</span></label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              id="price"
+              name="price"
+              value="<%= typeof formData !== 'undefined' && formData.price ? formData.price : '' %>"
+              class="form-input <%= (typeof errors !== 'undefined' && errors.price) ? 'form-input--error' : '' %>"
+              required
+              placeholder="0.00"
+            />
+            <% if (typeof errors !== 'undefined' && errors.price) { %>
+              <p class="form-error"><%= errors.price.msg %></p>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="slug" class="form-label">Custom Slug (Optional)</label>
+          <input
+            type="text"
+            id="slug"
+            name="slug"
+            value="<%= typeof formData !== 'undefined' && formData.slug ? formData.slug : '' %>"
+            class="form-input"
+            placeholder="Leave blank to auto-generate from name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="description" class="form-label">Garment Description</label>
+          <textarea
+            id="description"
+            name="description"
+            rows="5"
+            class="form-textarea"
+            placeholder="Materials, GSM, weave, fit, and aesthetic details..."
+          ><%= typeof formData !== 'undefined' && formData.description ? formData.description : '' %></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Size Variants & Stock Section -->
+    <div class="card">
+      <div class="card__header">
+        <h3 style="font-size: 1.15rem;">Size Variants & Inventory Stock</h3>
+        <button type="button" class="btn btn--outline btn--sm" data-add-variant>+ Add Size</button>
+      </div>
+      <div class="card__body">
+        <p style="color: var(--color-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+          Define available sizing (e.g. S, M, L, XL, XXL, or ONE SIZE) and current warehouse unit counts.
+        </p>
+
+        <div data-variants-container>
+          <% if (product && product.variants && product.variants.length > 0) { %>
+            <% product.variants.forEach(function(v) { %>
+              <div class="variant-row" style="display: flex; gap: 1rem; margin-bottom: 0.5rem;" data-variant-row>
+                <div style="flex: 1;">
+                  <input type="text" name="variant_sizes[]" value="<%= v.size %>" placeholder="Size" class="form-input" required />
+                </div>
+                <div style="flex: 1;">
+                  <input type="number" name="variant_stocks[]" value="<%= v.stock %>" min="0" placeholder="Stock" class="form-input" required />
+                </div>
+                <div>
+                  <button type="button" class="btn btn--danger btn--sm" data-remove-variant title="Remove">✕</button>
+                </div>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <!-- Default initial size rows -->
+            <div class="variant-row" style="display: flex; gap: 1rem; margin-bottom: 0.5rem;" data-variant-row>
+              <div style="flex: 1;">
+                <input type="text" name="variant_sizes[]" value="S" placeholder="Size" class="form-input" required />
+              </div>
+              <div style="flex: 1;">
+                <input type="number" name="variant_stocks[]" value="10" min="0" placeholder="Stock" class="form-input" required />
+              </div>
+              <div>
+                <button type="button" class="btn btn--danger btn--sm" data-remove-variant title="Remove">✕</button>
+              </div>
+            </div>
+            <div class="variant-row" style="display: flex; gap: 1rem; margin-bottom: 0.5rem;" data-variant-row>
+              <div style="flex: 1;">
+                <input type="text" name="variant_sizes[]" value="M" placeholder="Size" class="form-input" required />
+              </div>
+              <div style="flex: 1;">
+                <input type="number" name="variant_stocks[]" value="20" min="0" placeholder="Stock" class="form-input" required />
+              </div>
+              <div>
+                <button type="button" class="btn btn--danger btn--sm" data-remove-variant title="Remove">✕</button>
+              </div>
+            </div>
+            <div class="variant-row" style="display: flex; gap: 1rem; margin-bottom: 0.5rem;" data-variant-row>
+              <div style="flex: 1;">
+                <input type="text" name="variant_sizes[]" value="L" placeholder="Size" class="form-input" required />
+              </div>
+              <div style="flex: 1;">
+                <input type="number" name="variant_stocks[]" value="15" min="0" placeholder="Stock" class="form-input" required />
+              </div>
+              <div>
+                <button type="button" class="btn btn--danger btn--sm" data-remove-variant title="Remove">✕</button>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Image Upload & Publishing Controls -->
+  <div>
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <div class="card__header">
+        <h3 style="font-size: 1.15rem;">Product Image</h3>
+      </div>
+      <div class="card__body">
+        <div id="image-preview-target" style="aspect-ratio: 4/5; background-color: #000; border: 1px solid var(--color-border); border-radius: var(--radius); margin-bottom: 1rem; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+          <% if (typeof formData !== 'undefined' && formData.image_path) { %>
+            <img src="<%= formData.image_path %>" alt="Preview" class="product-card__image" />
+          <% } else { %>
+            <span style="color: var(--color-muted); font-size: 0.85rem;">No image selected</span>
+          <% } %>
+        </div>
+
+        <div class="form-group">
+          <label for="image" class="form-label">Upload Image File</label>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            accept="image/jpeg,image/png,image/webp"
+            class="form-input"
+            data-image-input
+            data-image-preview="image-preview-target"
+          />
+          <p class="form-hint">Accepted: JPEG, PNG, WebP (max 2 MB).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <h3 style="font-size: 1.15rem;">Publishing Status</h3>
+      </div>
+      <div class="card__body">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+          <input
+            type="checkbox"
+            id="is_published"
+            name="is_published"
+            value="1"
+            <%= (typeof formData === 'undefined' || formData.is_published === undefined || formData.is_published == 1 || formData.is_published === true) ? 'checked' : '' %>
+          />
+          <label for="is_published" style="font-weight: 500; cursor: pointer;">
+            Publish to Storefront
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--lg btn--block">
+          <%= isEdit ? 'Update Product' : 'Create Product' %>
+        </button>
+        <a href="/admin/products" class="btn btn--secondary btn--block" style="margin-top: 0.5rem;">
+          Cancel
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

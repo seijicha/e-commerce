@@ -1,0 +1,48 @@
+<div style="margin-bottom: 2rem;">
+  <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">Customers</h1>
+  <p style="color: var(--color-muted);">Customer directory, order histories, and account status controls.</p>
+</div>
+
+<% if (typeof customers !== 'undefined' && customers.length > 0) { %>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Registered</th>
+          <th style="text-align: right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% customers.forEach(function(c) { %>
+          <tr>
+            <td style="font-weight: 600;"><%= c.name %></td>
+            <td><%= c.email %></td>
+            <td><%= c.phone || '—' %></td>
+            <td>
+              <% if (c.is_active) { %>
+                <span class="badge badge--success">Active</span>
+              <% } else { %>
+                <span class="badge badge--danger">Deactivated</span>
+              <% } %>
+            </td>
+            <td><%= new Date(c.created_at).toLocaleDateString() %></td>
+            <td style="text-align: right;">
+              <a href="/admin/customers/<%= c.id %>" class="btn btn--outline btn--sm">View Profile</a>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+
+  <%- include('../../partials/pagination', { pagination }) %>
+<% } else { %>
+  <div style="text-align: center; padding: 4rem 1rem; background-color: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
+    <h3 style="margin-bottom: 0.5rem;">No registered customers</h3>
+    <p style="color: var(--color-muted);">No customer accounts have registered yet.</p>
+  </div>
+<% } %>

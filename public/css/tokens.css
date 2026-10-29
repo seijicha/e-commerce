@@ -1,0 +1,57 @@
+:root {
+  /* GlitchAttire Architectural Concrete Brand Palette */
+  --color-bg: #eceef0; /* Primary Concrete Canvas */
+  --color-surface: #ffffff; /* Architectural White Card Surfaces */
+  --color-surface-hover: #f3f5f7;
+  --color-surface-elevated: #ffffff;
+  --color-text: #1d2526; /* Deep Obsidian Charcoal */
+  --color-muted: #6f706e; /* Muted Concrete Gray */
+  --color-border: #d7dadc; /* Hairline Concrete Divider */
+  --color-border-hover: #3a3d3b; /* Dark Slate Hover */
+
+  /* Brand Accents */
+  --color-accent: #1d2526; /* Deep Obsidian Charcoal CTA */
+  --color-accent-hover: #3a3d3b; /* Dark Slate Olive */
+  --color-accent-active: #151a1b;
+  --color-accent-dim: rgba(29, 37, 38, 0.08);
+  --color-accent-light: #3a3d3b; /* Dark Slate Accent */
+  --color-accent-alt: #1d2526; /* High-contrast indicator bar */
+  --color-accent-alt-hover: #3a3d3b;
+  --color-accent-alt-dim: rgba(58, 61, 59, 0.12);
+
+  /* Semantic Feedback */
+  --color-success: #15803d;
+  --color-success-dim: rgba(21, 128, 61, 0.12);
+  --color-danger: #b91c1c;
+  --color-danger-dim: rgba(185, 28, 28, 0.12);
+  --color-warning: #b45309;
+  --color-warning-dim: rgba(180, 83, 9, 0.12);
+
+  /* Typography */
+  --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Spacing Scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+
+  /* Shape & Elevation */
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 9999px;
+
+  --shadow-sm: 0 1px 3px rgba(29, 37, 38, 0.06);
+  --shadow-md: 0 4px 16px rgba(29, 37, 38, 0.08);
+  --shadow-lg: 0 12px 32px rgba(29, 37, 38, 0.12);
+  --shadow-accent: 0 4px 20px rgba(29, 37, 38, 0.18);
+  --shadow-cyan: 0 4px 16px rgba(29, 37, 38, 0.12);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
+}

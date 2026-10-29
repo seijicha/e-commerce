@@ -1,0 +1,266 @@
+<% const totalStock=(product.variants || []).reduce((acc, v)=> acc + (Number(v.stock) || 0), 0);
+  %>
+
+  <div class="editorial-container">
+    <!-- Top Navigation / Breadcrumbs -->
+    <nav class="editorial-back-nav" aria-label="Breadcrumb">
+      <a href="/shop" class="editorial-back-link">
+        <svg class="icon icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>BACK TO STORE</span>
+      </a>
+    </nav>
+
+    <!-- Main Editorial Detail Layout -->
+    <div class="editorial-detail">
+      <!-- Left Column: Primary Garment Showcase -->
+      <div class="editorial-gallery">
+        <div class="editorial-gallery__main">
+          <% if (product.image_path) { %>
+            <img src="<%= product.image_path %>" alt="<%= product.name %>" class="editorial-gallery__image" />
+            <% } else { %>
+              <div class="editorial-gallery__placeholder">
+                <span>NO ARCHIVAL IMAGE</span>
+              </div>
+              <% } %>
+        </div>
+      </div>
+
+      <!-- Right Column: Sticky Purchasing & Spec Column -->
+      <div class="editorial-buy-col">
+        <div class="editorial-buy-col__header">
+          <div class="editorial-buy-col__eyebrow">
+            <span class="editorial-tag">
+              <%= product.category_name || 'ARCHIVE' %>
+            </span>
+            <span class="editorial-drop-id">DROP 01 // ED-2026</span>
+          </div>
+          <h1 class="editorial-buy-col__title">
+            <%= product.name %>
+          </h1>
+          <div class="editorial-buy-col__price-row">
+            <span class="editorial-buy-col__price">
+              <%= formatMoney(product.price) %>
+            </span>
+            <span class="editorial-scarcity">
+              <span
+                class="editorial-scarcity__dot <%= totalStock <= 5 ? 'editorial-scarcity__dot--urgent' : '' %>"></span>
+              <% if (totalStock <=0) { %>
+                SOLD OUT IN ALL SIZES
+                <% } else if (totalStock < 10) { %>
+                  ONLY <%= totalStock %> REMAINING IN THIS DROP
+                    <% } else { %>
+                      LIMITED ARCHIVAL RUN // <%= totalStock %> UNITS ALLOCATED
+                        <% } %>
+            </span>
+          </div>
+        </div>
+
+        <!-- Garment Flat-lay / Silhouette Thumbnail Card -->
+        <div class="editorial-flatlay-card">
+          <div class="editorial-flatlay-card__thumb">
+            <% if (product.image_path) { %>
+              <img src="<%= product.image_path %>" alt="<%= product.name %> Flat-lay" />
+              <% } %>
+          </div>
+          <div class="editorial-flatlay-card__info">
+            <span class="editorial-flatlay-card__label">TECHNICAL FLAT-LAY SPEC</span>
+            <span class="editorial-flatlay-card__sub">Drop shoulder silhouette &bull; Raw cyber distressed finish</span>
+          </div>
+        </div>
+
+        <% if (user && user.role==='customer' ) { %>
+          <!-- Customer Purchase Form -->
+          <form action="/cart/items" method="POST" class="editorial-buy-form">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+            <!-- Circular Ring Size Selector -->
+            <div class="editorial-size-section">
+              <div class="editorial-size-header">
+                <span class="editorial-section-label">SIZE</span>
+                <span class="editorial-size-helper">SELECT SIZING CURVE</span>
+              </div>
+              <div class="editorial-size-circles" role="radiogroup" aria-label="Garment size selection">
+                <% product.variants.forEach(function(variant, index) { %>
+                  <div class="size-circle-wrap">
+                    <input type="radio" id="size_<%= variant.id %>" name="variant_id" value="<%= variant.id %>"
+                      class="size-circle-input" <%=variant.stock <=0 ? 'disabled' : '' %>
+                    <%= (index===0 && variant.stock> 0) ? 'checked' : '' %>
+                      required
+                      />
+                      <label for="size_<%= variant.id %>" class="size-circle-label"
+                        title="<%= variant.stock > 0 ? variant.stock + ' remaining' : 'Sold out' %>">
+                        <%= variant.size %>
+                      </label>
+                  </div>
+                  <% }); %>
+              </div>
+            </div>
+
+            <!-- Quantity Stepper & Stock Warning -->
+            <div class="editorial-qty-row">
+              <span class="editorial-section-label">QUANTITY</span>
+              <div class="stepper stepper--minimal" data-stepper>
+                <button type="button" class="stepper__btn" data-stepper-dec aria-label="Decrease quantity">−</button>
+                <input type="number" id="quantity" name="quantity" value="1" min="1" max="99" class="stepper__input"
+                  data-stepper-input />
+                <button type="button" class="stepper__btn" data-stepper-inc aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+
+            <!-- Wide Pill Button: ADD TO__BAG -->
+            <button type="submit" class="btn-pill-bag" <%=totalStock <=0 ? 'disabled' : '' %>
+              >
+              <% if (totalStock <=0) { %>
+                SOLD OUT
+                <% } else { %>
+                  ADD TO BAG
+                  <% } %>
+            </button>
+          </form>
+          <% } else if (user && user.role==='admin' ) { %>
+            <!-- Admin Notice -->
+            <div class="alert alert--info editorial-admin-notice">
+              <svg class="icon icon--sm" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <span>Administrator Session: Shopping cart &amp; checkout are reserved for customers.</span>
+            </div>
+            <a href="/admin/products/<%= product.id %>/edit" class="btn-pill-bag btn-pill-bag--secondary">
+              EDIT IN ADMIN CONSOLE
+            </a>
+            <% } else { %>
+              <!-- Guest Prompt: Wide Pill Button Linking to Login with Return-To Target -->
+              <div class="editorial-guest-box">
+                <div class="editorial-size-section editorial-size-section--preview">
+                  <div class="editorial-size-header">
+                    <span class="editorial-section-label">AVAILABLE SIZES</span>
+                    <span class="editorial-size-helper">SIGN IN TO SELECT</span>
+                  </div>
+                  <div class="editorial-size-circles" aria-hidden="true">
+                    <% product.variants.forEach(function(variant) { %>
+                      <div class="size-circle-wrap">
+                        <span class="size-circle-label <%= variant.stock <= 0 ? 'size-circle-label--disabled' : '' %>">
+                          <%= variant.size %>
+                        </span>
+                      </div>
+                      <% }); %>
+                  </div>
+                </div>
+
+                <a href="/login?next=/shop/<%= product.slug %>" class="btn-pill-bag btn-pill-bag--guest">
+                  LOG IN TO ADD TO BAG
+                </a>
+              </div>
+              <% } %>
+
+                <!-- Expandable Accordions: Sizing Chart, Product Details, Textile & Cultural Inspiration -->
+                <div class="editorial-accordions">
+                  <details class="editorial-accordion" open>
+                    <summary class="editorial-accordion__trigger">
+                      <span>SIZING CHART</span>
+                      <span class="editorial-accordion__icon">+</span>
+                    </summary>
+                    <div class="editorial-accordion__content">
+                      <p class="editorial-accordion__hint">All measurements in inches. Designed for an exaggerated,
+                        architectural drop-shoulder fit.</p>
+                      <div class="editorial-size-table-wrap">
+                        <table class="editorial-size-table">
+                          <thead>
+                            <tr>
+                              <th>SIZE</th>
+                              <th>CHEST</th>
+                              <th>LENGTH</th>
+                              <th>SHOULDER</th>
+                              <th>SLEEVE</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td><strong>S</strong></td>
+                              <td>46"</td>
+                              <td>27.5"</td>
+                              <td>22"</td>
+                              <td>24"</td>
+                            </tr>
+                            <tr>
+                              <td><strong>M</strong></td>
+                              <td>48"</td>
+                              <td>28.5"</td>
+                              <td>23"</td>
+                              <td>24.5"</td>
+                            </tr>
+                            <tr>
+                              <td><strong>L</strong></td>
+                              <td>50"</td>
+                              <td>29.5"</td>
+                              <td>24"</td>
+                              <td>25"</td>
+                            </tr>
+                            <tr>
+                              <td><strong>XL</strong></td>
+                              <td>53"</td>
+                              <td>30.5"</td>
+                              <td>25"</td>
+                              <td>25.5"</td>
+                            </tr>
+                            <tr>
+                              <td><strong>XXL</strong></td>
+                              <td>56"</td>
+                              <td>31.5"</td>
+                              <td>26"</td>
+                              <td>26"</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </details>
+
+                  <details class="editorial-accordion">
+                    <summary class="editorial-accordion__trigger">
+                      <span>PRODUCT DETAILS</span>
+                      <span class="editorial-accordion__icon">+</span>
+                    </summary>
+                    <div class="editorial-accordion__content">
+                      <ul class="editorial-spec-list">
+                        <li><strong>Material:</strong> 480-520 GSM heavyweight combed technical cotton &amp; French
+                          terry.</li>
+                        <li><strong>Construction:</strong> Double-needle flatlock reinforced stitching with industrial
+                          bar-tack anchors.</li>
+                        <li><strong>Hardware:</strong> Custom matte black anodized zinc-alloy hardware and custom
+                          branded cord tips.</li>
+                        <li><strong>Finishing:</strong> Cold-pigment enzyme garment dye with localized vintage wash
+                          distress.</li>
+                        <li><strong>Care:</strong> Machine wash cold inside out with gentle detergent. Hang dry only in
+                          shade. Do not iron directly on print.</li>
+                      </ul>
+                    </div>
+                  </details>
+
+                  <details class="editorial-accordion">
+                    <summary class="editorial-accordion__trigger">
+                      <span>TEXTILE &amp; CULTURAL INSPIRATION</span>
+                      <span class="editorial-accordion__icon">+</span>
+                    </summary>
+                    <div class="editorial-accordion__content">
+                      <p class="editorial-narrative">
+                        <%= product.description
+                          || 'Engineered at the intersection of Tokyo cyberpunk subcultures and post-industrial brutalism. The silhouette rejects commercial standard proportions in favor of dramatic drape, heavy armor-like gauge, and tactile physical presence.'
+                          %>
+                      </p>
+                      <p class="editorial-narrative-meta">
+                        Archival reference: GLITCH-SPEC-<%= product.id.toString().padStart(4, '0' ) %> &bull; Limited
+                          atelier production run.
+                      </p>
+                    </div>
+                  </details>
+                </div>
+      </div>
+    </div>
+  </div>

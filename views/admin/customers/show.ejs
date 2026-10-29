@@ -1,0 +1,91 @@
+<div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+  <div>
+    <a href="/admin/customers" class="btn btn--secondary btn--sm" style="margin-bottom: 0.75rem; display: inline-flex; align-items: center; gap: 0.35rem;">
+      <svg class="icon icon--sm" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span>Back to Customers</span>
+    </a>
+    <h1 style="font-size: 2rem; margin-bottom: 0.25rem;"><%= customer.name %></h1>
+    <p style="color: var(--color-muted);">Customer ID: #<%= customer.id %></p>
+  </div>
+
+  <div>
+    <form action="/admin/customers/<%= customer.id %>/active?_method=PATCH" method="POST">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <input type="hidden" name="is_active" value="<%= customer.is_active ? '0' : '1' %>" />
+      <button
+        type="submit"
+        class="btn <%= customer.is_active ? 'btn--danger' : 'btn--primary' %>"
+        onclick="return confirm('Change active status for customer &quot;<%= customer.name %>&quot;?')"
+      >
+        <%= customer.is_active ? 'Deactivate Account' : 'Reactivate Account' %>
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="checkout-grid">
+  <!-- Profile Metadata -->
+  <div>
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <div class="card__header">
+        <h3 style="font-size: 1.15rem;">Customer Details</h3>
+      </div>
+      <div class="card__body" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div>
+          <span style="color: var(--color-muted); font-size: 0.85rem;">Email Address:</span>
+          <p><strong style="color: var(--color-text);"><%= customer.email %></strong></p>
+        </div>
+        <div>
+          <span style="color: var(--color-muted); font-size: 0.85rem;">Phone Number:</span>
+          <p><%= customer.phone || 'None provided' %></p>
+        </div>
+        <div>
+          <span style="color: var(--color-muted); font-size: 0.85rem;">Account Status:</span>
+          <p>
+            <% if (customer.is_active) { %>
+              <span class="badge badge--success">Active</span>
+            <% } else { %>
+              <span class="badge badge--danger">Deactivated</span>
+            <% } %>
+          </p>
+        </div>
+        <div>
+          <span style="color: var(--color-muted); font-size: 0.85rem;">Registration Date:</span>
+          <p><%= new Date(customer.created_at).toLocaleString() %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orders Placed by Customer -->
+  <div>
+    <div class="card">
+      <div class="card__header">
+        <h3 style="font-size: 1.15rem;">Order History (<%= customer.orders ? customer.orders.length : 0 %>)</h3>
+      </div>
+      <div class="card__body">
+        <% if (customer.orders && customer.orders.length > 0) { %>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <% customer.orders.forEach(function(o) { %>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; font-size: 0.9rem;">
+                <div>
+                  <a href="/admin/orders/<%= o.id %>" style="font-weight: 600; color: var(--color-accent-alt);">
+                    <%= o.order_number %>
+                  </a>
+                  <p style="color: var(--color-muted); font-size: 0.8rem;">
+                    <%= new Date(o.created_at).toLocaleDateString() %> &bull; <%= formatMoney(o.total) %>
+                  </p>
+                </div>
+                <span class="badge <%= o.status === 'delivered' ? 'badge--success' : o.status === 'cancelled' ? 'badge--danger' : 'badge--warning' %>">
+                  <%= o.status %>
+                </span>
+              </div>
+            <% }); %>
+          </div>
+        <% } else { %>
+          <p style="color: var(--color-muted);">No orders placed yet.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>

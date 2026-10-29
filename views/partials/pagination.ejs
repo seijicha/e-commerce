@@ -1,0 +1,23 @@
+<% if (typeof pagination !== 'undefined' && pagination.totalPages > 1) { %>
+  <nav class="pagination" style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin: 2rem 0;" aria-label="Pagination">
+    <% if (pagination.hasPrev) { %>
+      <a href="?page=<%= pagination.prevPage %><%- typeof searchQuery !== 'undefined' && searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %><%- typeof activeCategory !== 'undefined' && activeCategory ? '&category=' + encodeURIComponent(activeCategory) : '' %><%- typeof activeSort !== 'undefined' && activeSort ? '&sort=' + encodeURIComponent(activeSort) : '' %><%- typeof activeStatus !== 'undefined' && activeStatus ? '&status=' + encodeURIComponent(activeStatus) : '' %>"
+         class="btn btn--secondary btn--sm" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+        <svg class="icon icon--sm" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span>Previous</span>
+      </a>
+    <% } %>
+
+    <span style="color: var(--color-muted); font-size: 0.9rem; margin: 0 0.5rem;">
+      Page <%= pagination.currentPage %> of <%= pagination.totalPages %>
+    </span>
+
+    <% if (pagination.hasNext) { %>
+      <a href="?page=<%= pagination.nextPage %><%- typeof searchQuery !== 'undefined' && searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %><%- typeof activeCategory !== 'undefined' && activeCategory ? '&category=' + encodeURIComponent(activeCategory) : '' %><%- typeof activeSort !== 'undefined' && activeSort ? '&sort=' + encodeURIComponent(activeSort) : '' %><%- typeof activeStatus !== 'undefined' && activeStatus ? '&status=' + encodeURIComponent(activeStatus) : '' %>"
+         class="btn btn--secondary btn--sm" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+        <span>Next</span>
+        <svg class="icon icon--sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+    <% } %>
+  </nav>
+<% } %>

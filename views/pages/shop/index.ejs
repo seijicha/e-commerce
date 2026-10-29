@@ -1,0 +1,62 @@
+<div style="margin-bottom: 2rem;">
+  <h1 style="font-size: 2.25rem; margin-bottom: 0.5rem;">
+    <%= typeof currentCategory !== 'undefined' && currentCategory ? currentCategory.name : 'Catalog' %>
+  </h1>
+  <p style="color: var(--color-muted);">
+    <% if (typeof currentCategory !== 'undefined' && currentCategory) { %>
+      Showing engineered <%= currentCategory.name.toLowerCase() %> releases and garments.
+    <% } else { %>
+      Showing all engineered releases, hoodies, graphic tees, and cargo utility bottoms.
+    <% } %>
+  </p>
+</div>
+
+<!-- Search & Filter Bar -->
+<form method="GET" action="/shop" class="filter-bar" data-catalog-filter-form>
+  <% if (activeCategory) { %>
+    <input type="hidden" name="category" value="<%= activeCategory %>" />
+  <% } %>
+
+  <div style="display: flex; gap: 0.5rem; flex: 1; min-width: 260px;">
+    <input
+      type="text"
+      name="q"
+      placeholder="Search <%= typeof currentCategory !== 'undefined' && currentCategory ? currentCategory.name.toLowerCase() : 'products' %> by keyword..."
+      value="<%= searchQuery %>"
+      class="form-input"
+    />
+    <button type="submit" class="btn btn--secondary">Search</button>
+    <% if (searchQuery) { %>
+      <a href="/shop<%= activeCategory ? '?category=' + encodeURIComponent(activeCategory) : '' %><%= activeSort && activeSort !== 'newest' ? (activeCategory ? '&' : '?') + 'sort=' + encodeURIComponent(activeSort) : '' %>" class="btn btn--outline" title="Clear search">Clear</a>
+    <% } %>
+  </div>
+
+  <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+    <!-- Newest / Oldest and price sort filter -->
+    <select name="sort" class="form-select" data-filter-select onchange="this.form ? this.form.submit() : this.closest('form').submit()" style="width: auto;" aria-label="Sort products">
+      <option value="newest" <%= activeSort === 'newest' ? 'selected' : '' %>>Newest First</option>
+      <option value="oldest" <%= activeSort === 'oldest' ? 'selected' : '' %>>Oldest First</option>
+      <option value="price_asc" <%= activeSort === 'price_asc' ? 'selected' : '' %>>Price: Low to High</option>
+      <option value="price_desc" <%= activeSort === 'price_desc' ? 'selected' : '' %>>Price: High to Low</option>
+      <option value="name_asc" <%= activeSort === 'name_asc' ? 'selected' : '' %>>Name: A-Z</option>
+    </select>
+  </div>
+</form>
+
+<% if (typeof products !== 'undefined' && products.length > 0) { %>
+  <div class="product-grid">
+    <% products.forEach(function(product) { %>
+      <%- include('../../partials/product-card', { product }) %>
+    <% }); %>
+  </div>
+
+  <%- include('../../partials/pagination', { pagination, searchQuery, activeCategory, activeSort }) %>
+<% } else { %>
+  <div style="text-align: center; padding: 4rem 1rem; background-color: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
+    <h3 style="margin-bottom: 0.5rem;">No products found</h3>
+    <p style="color: var(--color-muted); margin-bottom: 1.5rem;">
+      Try adjusting your search criteria<%= activeCategory ? ' or explore all releases' : ' or resetting active filters' %>.
+    </p>
+    <a href="/shop" class="btn btn--outline">Reset Filters</a>
+  </div>
+<% } %>

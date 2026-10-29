@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'GlitchAttire — Cyberpunk & Heavyweight Streetwear' %></title>
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/pages.css">
+  <%- style %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="site-main">
+    <% if (typeof isFullWidth !== 'undefined' && isFullWidth) { %>
+      <div class="site-flash-wrap container">
+        <%- include('../partials/flash') %>
+      </div>
+      <%- body %>
+    <% } else { %>
+      <div class="container site-main__container">
+        <%- include('../partials/flash') %>
+        <%- body %>
+      </div>
+    <% } %>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/confirm-delete') %>
+  <%- include('../partials/auth-prompt-dialog') %>
+
+  <script type="module" src="/js/main.js"></script>
+  <%- script %>
+</body>
+</html>

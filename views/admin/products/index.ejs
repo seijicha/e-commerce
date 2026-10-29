@@ -1,0 +1,116 @@
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+  <div>
+    <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">Products</h1>
+    <p style="color: var(--color-muted);">Manage apparel catalog, size variants, and publishing statuses.</p>
+  </div>
+  <a href="/admin/products/new" class="btn btn--primary">+ New Product</a>
+</div>
+
+<!-- Filter Bar -->
+<form method="GET" action="/admin/products" class="filter-bar">
+  <div style="display: flex; gap: 0.5rem; flex: 1; min-width: 250px;">
+    <input type="text" name="search" placeholder="Search by name or slug..." value="<%= searchQuery %>" class="form-input" />
+    <button type="submit" class="btn btn--secondary">Search</button>
+  </div>
+
+  <div style="display: flex; gap: 0.75rem; align-items: center;">
+    <select name="category" class="form-select" onchange="this.form.submit()" style="width: auto;">
+      <option value="">All Categories</option>
+      <% categories.forEach(function(cat) { %>
+        <option value="<%= cat.id %>" <%= String(activeCategory) === String(cat.id) ? 'selected' : '' %>>
+          <%= cat.name %>
+        </option>
+      <% }); %>
+    </select>
+
+    <select name="status" class="form-select" onchange="this.form.submit()" style="width: auto;">
+      <option value="">All Statuses</option>
+      <option value="published" <%= activeStatus === 'published' ? 'selected' : '' %>>Published</option>
+      <option value="draft" <%= activeStatus === 'draft' ? 'selected' : '' %>>Unpublished / Draft</option>
+    </select>
+  </div>
+</form>
+
+<% if (typeof products !== 'undefined' && products.length > 0) { %>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name / Slug</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Total Stock</th>
+          <th>Status</th>
+          <th style="text-align: right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% products.forEach(function(p) { %>
+          <tr>
+            <td style="width: 60px;">
+              <% if (p.image_path) { %>
+                <img src="<%= p.image_path %>" alt="<%= p.name %>" style="width: 44px; height: 50px; object-fit: cover; border-radius: var(--radius-sm);" />
+              <% } else { %>
+                <div style="width: 44px; height: 50px; background-color: var(--color-surface-hover); border-radius: var(--radius-sm);"></div>
+              <% } %>
+            </td>
+            <td>
+              <a href="/admin/products/<%= p.id %>" style="font-weight: 600; color: inherit;">
+                <%= p.name %>
+              </a>
+              <p style="color: var(--color-muted); font-size: 0.8rem;"><%= p.slug %></p>
+            </td>
+            <td>
+              <span class="badge badge--neutral"><%= p.category_name %></span>
+            </td>
+            <td style="font-weight: 600;"><%= formatMoney(p.price) %></td>
+            <td>
+              <span class="badge <%= p.total_stock <= 10 ? 'badge--warning' : 'badge--neutral' %>">
+                <%= p.total_stock %> units
+              </span>
+            </td>
+            <td>
+              <% if (p.is_published) { %>
+                <span class="badge badge--success">Published</span>
+              <% } else { %>
+                <span class="badge badge--neutral">Draft</span>
+              <% } %>
+            </td>
+            <td style="text-align: right;">
+              <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                <form action="/admin/products/<%= p.id %>/publish?_method=PATCH" method="POST" style="display: inline;">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                  <button type="submit" class="btn btn--secondary btn--sm" title="<%= p.is_published ? 'Unpublish' : 'Publish' %>">
+                    <%= p.is_published ? 'Hide' : 'Show' %>
+                  </button>
+                </form>
+
+                <a href="/admin/products/<%= p.id %>/edit" class="btn btn--outline btn--sm">Edit</a>
+
+                <button
+                  type="button"
+                  class="btn btn--danger btn--sm"
+                  data-confirm
+                  data-action="/admin/products/<%= p.id %>"
+                  data-confirm-message="Delete product &quot;<%= p.name %>&quot;? All size variants and cart items will be deleted permanently."
+                  title="Delete product"
+                >
+                  ✕
+                </button>
+              </div>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+
+  <%- include('../../partials/pagination', { pagination, searchQuery, activeCategory, activeStatus }) %>
+<% } else { %>
+  <div style="text-align: center; padding: 4rem 1rem; background-color: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
+    <h3 style="margin-bottom: 0.5rem;">No products found</h3>
+    <p style="color: var(--color-muted); margin-bottom: 1.5rem;">Create your first apparel drop or clear active search filters.</p>
+    <a href="/admin/products/new" class="btn btn--primary">+ Create New Product</a>
+  </div>
+<% } %>

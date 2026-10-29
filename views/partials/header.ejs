@@ -1,0 +1,141 @@
+<% const activePath=typeof currentPath !=='undefined' ? currentPath : '' ; const currentUser=typeof user !=='undefined'
+  ? user : null; const token=typeof csrfToken !=='undefined' ? csrfToken : '' ; const currentCategory=(typeof
+  activeCategory !=='undefined' && activeCategory) ? activeCategory : (typeof product !=='undefined' && product &&
+  product.category_slug ? product.category_slug : null); const isHomeActive=activePath==='/' ; const
+  isHoodiesActive=currentCategory==='hoodies-sweatshirts' ; const isTeesActive=currentCategory==='graphic-tees' ; const
+  isCargoActive=currentCategory==='bottoms-pants' ; const isAnyCategoryActive=isHoodiesActive || isTeesActive ||
+  isCargoActive; const isAllDropsActive=(activePath==='/shop' || activePath.startsWith('/shop')) &&
+  !isAnyCategoryActive; %>
+  <div class="site-ticker">
+    <div class="container site-ticker__inner">
+      <span class="site-ticker__text">
+        <span class="site-ticker__highlight">
+          FASHION
+        </span>
+      </span>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a href="/" class="brand-logo" aria-label="GLITCH ATTIRE">
+        <img src="/logo/logo.png" alt="GLITCH ATTIRE" class="brand-logo__img" />
+      </a>
+
+      <nav class="site-nav">
+        <a href="/" class="site-nav__link <%= isHomeActive ? 'site-nav__link--active' : '' %>" <%=isHomeActive
+          ? 'aria-current="page"' : '' %>>Home</a>
+        <a href="/shop" class="site-nav__link <%= isAllDropsActive ? 'site-nav__link--active' : '' %>"
+          <%=isAllDropsActive ? 'aria-current="page"' : '' %>>All Drops</a>
+        <a href="/shop?category=hoodies-sweatshirts"
+          class="site-nav__link <%= isHoodiesActive ? 'site-nav__link--active' : '' %>" <%=isHoodiesActive
+          ? 'aria-current="page"' : '' %>>Hoodies & Fleece</a>
+        <a href="/shop?category=graphic-tees" class="site-nav__link <%= isTeesActive ? 'site-nav__link--active' : '' %>"
+          <%=isTeesActive ? 'aria-current="page"' : '' %>>Graphic Tees</a>
+        <a href="/shop?category=bottoms-pants"
+          class="site-nav__link <%= isCargoActive ? 'site-nav__link--active' : '' %>" <%=isCargoActive
+          ? 'aria-current="page"' : '' %>>Cargo & Utility</a>
+      </nav>
+
+      <div class="site-nav__actions">
+        <% if (currentUser) { %>
+          <% if (currentUser.role==='customer' ) { %>
+            <a href="/cart" class="site-nav__icon <%= activePath.startsWith('/cart') ? 'site-nav__icon--active' : '' %>"
+              aria-label="Shopping Cart" title="Shopping Cart">
+              <svg class="icon icon--md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+              <% if (typeof cartCount !=='undefined' && cartCount> 0) { %>
+                <span class="site-nav__badge-dot">
+                  <%= cartCount %>
+                </span>
+                <% } %>
+            </a>
+            <a href="/orders"
+              class="site-nav__icon <%= activePath.startsWith('/orders') ? 'site-nav__icon--active' : '' %>"
+              aria-label="Orders" title="Orders">
+              <svg class="icon icon--md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path
+                  d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                </path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+            </a>
+            <a href="/account"
+              class="site-nav__icon <%= activePath.startsWith('/account') ? 'site-nav__icon--active' : '' %>"
+              aria-label="Account" title="Account">
+              <svg class="icon icon--md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </a>
+            <form action="/logout" method="POST" class="inline-form">
+              <input type="hidden" name="_csrf" value="<%= token %>" />
+              <button type="submit" class="site-nav__icon" aria-label="Log Out" title="Log Out">
+                <svg class="icon icon--md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+              </button>
+            </form>
+            <% } else if (currentUser.role==='admin' ) { %>
+              <a href="/admin"
+                class="site-nav__icon <%= activePath.startsWith('/admin') ? 'site-nav__icon--active' : '' %>"
+                aria-label="Admin Console" title="Admin Console">
+                <svg class="icon icon--md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+              </a>
+              <form action="/admin/logout" method="POST" class="inline-form">
+                <input type="hidden" name="_csrf" value="<%= token %>" />
+                <button type="submit" class="site-nav__icon" aria-label="Log Out" title="Log Out">
+                  <svg class="icon icon--md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                </button>
+              </form>
+              <% } %>
+        <% } else { %>
+          <a href="/cart" class="site-nav__icon js-auth-required" data-auth-required="true" data-auth-feature="Cart" aria-label="Shopping Cart" title="Shopping Cart">
+            <svg class="icon icon--md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+          </a>
+          <a href="/orders" class="site-nav__icon js-auth-required" data-auth-required="true" data-auth-feature="Orders" aria-label="Orders" title="Orders">
+            <svg class="icon icon--md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </a>
+          <a href="/account" class="site-nav__icon js-auth-required" data-auth-required="true" data-auth-feature="Account" aria-label="Account" title="Account">
+            <svg class="icon icon--md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </a>
+          <div class="site-nav__auth-group">
+            <a href="/login" class="site-nav__link">Log In</a>
+            <a href="/register" class="btn btn--primary btn--sm">Register</a>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </header>

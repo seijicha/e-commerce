@@ -1,0 +1,435 @@
+<!-- 1. Full-Bleed Editorial Hero -->
+<section class="hero--editorial" data-hero-section>
+  <div class="hero-video-container" data-hero-video-container>
+    <video
+      class="hero-video"
+      data-hero-video
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    >
+      <source src="/hero_vid.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-video-overlay" data-hero-overlay></div>
+    <button class="hero-intro__skip" data-hero-skip type="button" aria-label="Skip video intro">
+      <span>EXPLORE ARCHIVE</span>
+      <svg class="icon icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <polyline points="19 12 12 19 5 12"></polyline>
+      </svg>
+    </button>
+  </div>
+
+  <div class="container hero__container">
+    <div class="hero__content-box" data-hero-content>
+      <h1 class="hero__title--editorial">
+        Distorted Silhouettes Engineered for the Concrete Grid.
+      </h1>
+      <p class="hero__desc--editorial">
+        Custom-milled 500 GSM French terry cotton, high-density cyber graphic screenprints, and tactical technical
+        hardware engineered for non-conforming urban aesthetics.
+      </p>
+      <div class="hero__cta-group">
+        <a href="/shop" class="btn btn--primary btn--lg">Explore Collection</a>
+        <a href="/shop?category=hoodies-sweatshirts" class="btn btn--outline btn--lg">View Heavyweight Fleece</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Value Propositions / Trust Strip -->
+<section class="trust-strip">
+  <div class="container">
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="trust-card__icon">
+          <svg class="icon icon--md icon--accent" viewBox="0 0 24 24">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <div>
+          <h4 class="trust-card__title">Express Global Dispatch</h4>
+          <p class="trust-card__desc">24–48hr worldwide tracked dispatch</p>
+        </div>
+      </div>
+
+      <div class="trust-card">
+        <div class="trust-card__icon">
+          <svg class="icon icon--md icon--accent" viewBox="0 0 24 24">
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
+          </svg>
+        </div>
+        <div>
+          <h4 class="trust-card__title">30-Day Archive Returns</h4>
+          <p class="trust-card__desc">Frictionless returns & size adjustments</p>
+        </div>
+      </div>
+
+      <div class="trust-card">
+        <div class="trust-card__icon">
+          <svg class="icon icon--md icon--accent" viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <path d="m9 12 2 2 4-4"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="trust-card__title">500 GSM Heavyweight</h4>
+          <p class="trust-card__desc">Custom-milled dense luxury cotton</p>
+        </div>
+      </div>
+
+      <div class="trust-card">
+        <div class="trust-card__icon">
+          <svg class="icon icon--md icon--accent" viewBox="0 0 24 24">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7.01" y2="7"></line>
+          </svg>
+        </div>
+        <div>
+          <h4 class="trust-card__title">Serialized Editions</h4>
+          <p class="trust-card__desc">Limited runs, zero restock guarantee</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Shop New Releases -->
+<section class="home-section">
+  <div class="container">
+    <div class="section-center-head">
+      <h2 class="section-center-head__title">Shop New Releases</h2>
+      <p class="section-center-head__subtitle">
+        Limited seasonal pieces cut from heavyweight textiles and detailed with precision hardware.
+      </p>
+    </div>
+
+    <% if (typeof featured !=='undefined' && featured.length> 0) { %>
+      <div class="product-grid">
+        <% featured.forEach(function(product) { %>
+          <%- include('../../partials/product-card', { product }) %>
+            <% }); %>
+      </div>
+      <% } else { %>
+        <p class="home-section__empty">No drops available at the moment.</p>
+        <% } %>
+
+          <div class="home-section__action-row">
+            <a href="/shop" class="btn btn--outline btn--lg">
+              <span>View Complete Catalog</span>
+              <svg class="icon icon--sm" viewBox="0 0 24 24">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+  </div>
+</section>
+
+<!-- 4. Mid-Page Promotional Banner (30% OFF) -->
+<section class="container">
+  <div class="promo-banner">
+    <div class="promo-banner__content">
+      <p class="promo-banner__tag">// LIMITED TIME ARCHIVE CLEARANCE</p>
+      <h2 class="promo-banner__headline">30% OFF</h2>
+      <p class="promo-banner__desc">
+        Exclusive seasonal markdown across select technical windbreakers, oversized fleeces, and tactical cargo
+        trousers.
+      </p>
+      <a href="/shop" class="btn btn--primary btn--lg">Shop Archive Sale</a>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Curated Capsule Divisions -->
+<section class="home-section">
+  <div class="container">
+    <div class="section-center-head">
+      <h2 class="section-center-head__title">New Capsule Divisions</h2>
+      <p class="section-center-head__subtitle">
+        Curated design languages tailored for distinct environments and urban styling.
+      </p>
+    </div>
+
+    <div class="capsule-grid" data-scroll-stagger>
+      <div class="capsule-card capsule-card--fleece" data-capsule-item style="--item-index: 0;">
+        <div class="capsule-card__content">
+          <h3 class="capsule-card__title">Heavyweight Fleece Lab</h3>
+          <a href="/shop?category=hoodies-sweatshirts" class="btn btn--outline btn--sm">Explore Fleece</a>
+        </div>
+      </div>
+
+      <div class="capsule-card capsule-card--cargo" data-capsule-item style="--item-index: 1;">
+        <div class="capsule-card__content">
+          <h3 class="capsule-card__title">Tactical Cargo Utility</h3>
+          <a href="/shop?category=bottoms-pants" class="btn btn--outline btn--sm">Explore Utility</a>
+        </div>
+      </div>
+
+      <div class="capsule-card capsule-card--graphics" data-capsule-item style="--item-index: 2;">
+        <div class="capsule-card__content">
+          <h3 class="capsule-card__title">Distorted Cyber Graphics</h3>
+          <a href="/shop?category=graphic-tees" class="btn btn--outline btn--sm">Explore Graphics</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Worn on the Grid: Real Looks in Real Time -->
+<section class="home-section">
+  <div class="container">
+    <div class="section-center-head">
+      <h2 class="section-center-head__title">Worn on the Grid: Real Looks in Real Time</h2>
+      <p class="section-center-head__subtitle">
+        Captured in motion across Shibuya, Kreuzberg, Lower Manhattan, Hongdae, Manila, and Beijing.
+      </p>
+    </div>
+  </div>
+
+  <div class="street-strip">
+    <div class="street-strip__track">
+      <!-- Primary Set -->
+      <div class="street-card">
+        <div class="street-card__image-box">
+          <img src="/images/street_tokyo.jpg" alt="Tokyo Streetwear — Crinkled Metallic Funnel Anorak"
+            class="street-card__image" loading="lazy" />
+          <span class="street-card__tag">SHIBUYA, TOKYO</span>
+        </div>
+        <div class="street-card__body">
+          <p class="street-card__product-name">Crinkled Metallic Funnel Anorak</p>
+          <p class="street-card__location">Worn with Ruched Leg Gaiters & Wide Bermudas</p>
+        </div>
+      </div>
+
+      <div class="street-card">
+        <div class="street-card__image-box">
+          <img src="/images/street_berlin.jpg" alt="Berlin Streetwear — Tapestry Jacquard Zip Blouson"
+            class="street-card__image" loading="lazy" />
+          <span class="street-card__tag">KREUZBERG, BERLIN</span>
+        </div>
+        <div class="street-card__body">
+          <p class="street-card__product-name">Tapestry Jacquard Zip Blouson</p>
+          <p class="street-card__location">Worn with "OFF" Flared Pants & Emerald Shag Knit</p>
+        </div>
+      </div>
+
+      <div class="street-card">
+        <div class="street-card__image-box">
+          <img src="/images/street_nyc.jpg" alt="NYC Streetwear — Emerald Paneled Moto Leather Jacket"
+            class="street-card__image" loading="lazy" />
+          <span class="street-card__tag">LOWER EAST SIDE, NYC</span>
+        </div>
+        <div class="street-card__body">
+          <p class="street-card__product-name">Emerald Paneled Moto Leather Jacket</p>
+          <p class="street-card__location">Worn with Floor-Sweeping Flared Raw Denim</p>
+        </div>
+      </div>
+
+      <div class="street-card">
+        <div class="street-card__image-box">
+          <img src="/images/street_seoul.jpg" alt="Seoul Streetwear — Slashed Deconstructed Striped Knit"
+            class="street-card__image" loading="lazy" />
+          <span class="street-card__tag">HONGDAE, SEOUL</span>
+        </div>
+        <div class="street-card__body">
+          <p class="street-card__product-name">Slashed Deconstructed Striped Knit</p>
+          <p class="street-card__location">Worn with Contrast-Stitch Balloon Cargos</p>
+        </div>
+      </div>
+
+      <div class="street-card">
+        <div class="street-card__image-box">
+          <img src="/images/street_ph.jpg" alt="Manila Streetwear — Syndicate Graphic Boxy Tee & Shorts"
+            class="street-card__image" loading="lazy" />
+          <span class="street-card__tag">BGC, MANILA</span>
+        </div>
+        <div class="street-card__body">
+          <p class="street-card__product-name">Syndicate Graphic Boxy Tee & Shorts</p>
+          <p class="street-card__location">Worn with Relaxed Skate Bermudas & Chunky Hardware</p>
+        </div>
+      </div>
+
+      <div class="street-card">
+        <div class="street-card__image-box">
+          <img src="/images/street_china.webp" alt="Beijing Streetwear — Dragon Crest Oversized Blazer"
+            class="street-card__image" loading="lazy" />
+          <span class="street-card__tag">SANLITUN, BEIJING</span>
+        </div>
+        <div class="street-card__body">
+          <p class="street-card__product-name">Dragon Crest Oversized Tailored Blazer</p>
+          <p class="street-card__location">Worn with Tartan Pleated Wrap & Platform Stompers</p>
+        </div>
+      </div>
+
+      <!-- Duplicate Set for Seamless Infinite Slideshow -->
+      <div class="street-card" aria-hidden="true">
+        <div class="street-card__image-box">
+          <img src="/images/street_tokyo.jpg" alt=""
+            class="street-card__image" loading="lazy" />
+          <span class="street-card__tag">SHIBUYA, TOKYO</span>
+        </div>
+        <div class="street-card__body">
+          <p class="street-card__product-name">Crinkled Metallic Funnel Anorak</p>
+          <p class="street-card__location">Worn with Ruched Leg Gaiters & Wide Bermudas</p>
+        </div>
+      </div>
+
+      <div class="street-card" aria-hidden="true">
+        <div class="street-card__image-box">
+          <img src="/images/street_berlin.jpg" alt=""
+            class="street-card__image" loading="lazy" />
+          <span class="street-card__tag">KREUZBERG, BERLIN</span>
+        </div>
+        <div class="street-card__body">
+          <p class="street-card__product-name">Tapestry Jacquard Zip Blouson</p>
+          <p class="street-card__location">Worn with "OFF" Flared Pants & Emerald Shag Knit</p>
+        </div>
+      </div>
+
+      <div class="street-card" aria-hidden="true">
+        <div class="street-card__image-box">
+          <img src="/images/street_nyc.jpg" alt=""
+            class="street-card__image" loading="lazy" />
+          <span class="street-card__tag">LOWER EAST SIDE, NYC</span>
+        </div>
+        <div class="street-card__body">
+          <p class="street-card__product-name">Emerald Paneled Moto Leather Jacket</p>
+          <p class="street-card__location">Worn with Floor-Sweeping Flared Raw Denim</p>
+        </div>
+      </div>
+
+      <div class="street-card" aria-hidden="true">
+        <div class="street-card__image-box">
+          <img src="/images/street_seoul.jpg" alt=""
+            class="street-card__image" loading="lazy" />
+          <span class="street-card__tag">HONGDAE, SEOUL</span>
+        </div>
+        <div class="street-card__body">
+          <p class="street-card__product-name">Slashed Deconstructed Striped Knit</p>
+          <p class="street-card__location">Worn with Contrast-Stitch Balloon Cargos</p>
+        </div>
+      </div>
+
+      <div class="street-card" aria-hidden="true">
+        <div class="street-card__image-box">
+          <img src="/images/street_ph.jpg" alt=""
+            class="street-card__image" loading="lazy" />
+          <span class="street-card__tag">BGC, MANILA</span>
+        </div>
+        <div class="street-card__body">
+          <p class="street-card__product-name">Syndicate Graphic Boxy Tee & Shorts</p>
+          <p class="street-card__location">Worn with Relaxed Skate Bermudas & Chunky Hardware</p>
+        </div>
+      </div>
+
+      <div class="street-card" aria-hidden="true">
+        <div class="street-card__image-box">
+          <img src="/images/street_china.webp" alt=""
+            class="street-card__image" loading="lazy" />
+          <span class="street-card__tag">SANLITUN, BEIJING</span>
+        </div>
+        <div class="street-card__body">
+          <p class="street-card__product-name">Dragon Crest Oversized Tailored Blazer</p>
+          <p class="street-card__location">Worn with Tartan Pleated Wrap & Platform Stompers</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Community Testimonials & Reviews -->
+<section class="home-section">
+  <div class="container">
+    <div class="section-center-head">
+      <h2 class="section-center-head__title">What the Syndicate Says</h2>
+      <p class="section-center-head__subtitle">
+        Verified reviews from designers, stylists, and collectors worldwide.
+      </p>
+    </div>
+
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-card__avatar-box">
+          <img src="/images/reviewer_marcus.jpg" alt="Marcus Vance" class="testimonial-card__avatar" loading="lazy" />
+        </div>
+        <div class="testimonial-card__content">
+          <div class="testimonial-card__stars" aria-label="5 out of 5 stars">
+            <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+              </polygon>
+            </svg>
+            <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+              </polygon>
+            </svg>
+            <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+              </polygon>
+            </svg>
+            <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+              </polygon>
+            </svg>
+            <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+              </polygon>
+            </svg>
+          </div>
+          <h3 class="testimonial-card__headline">Vintage Acid Denim & Tailored Street Layering</h3>
+          <p class="testimonial-card__quote">
+            "The structural drape and vintage wash on the heavyweight acid denim jacket are phenomenal. It layers cleanly over textured shirting with heavy-duty brass hardware and a relaxed silhouette. Definitely my staple piece for the season."
+          </p>
+          <p class="testimonial-card__author">— Marcus Vance, Creative Director at Cyberhaus, London</p>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-card__avatar-box">
+          <img src="/images/reviewer_elena.jpg" alt="Elena Rostova" class="testimonial-card__avatar" loading="lazy" />
+        </div>
+        <div class="testimonial-card__content">
+          <div class="testimonial-card__stars" aria-label="5 out of 5 stars">
+            <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+              </polygon>
+            </svg>
+            <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+              </polygon>
+            </svg>
+            <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+              </polygon>
+            </svg>
+            <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+              </polygon>
+            </svg>
+            <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+              </polygon>
+            </svg>
+          </div>
+          <h3 class="testimonial-card__headline">Scarlet Cropped Graphic Tee & Deconstructed Denim Jorts</h3>
+          <p class="testimonial-card__quote">
+            "The scarlet cropped graphic tee paired with the deconstructed wide-leg denim shorts captures pure elevated street energy. The boxy crop maintains its structured silhouette while the distressed denim has an incredible vintage drape. Truly exceptional textile craft."
+          </p>
+          <p class="testimonial-card__author">— Elena Rostova, Wardrobe Stylist & Fashion Editor, Berlin</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,13 @@
+<div style="margin-bottom: 2rem;">
+  <a href="/admin/products" class="btn btn--secondary btn--sm" style="margin-bottom: 0.75rem; display: inline-flex; align-items: center; gap: 0.35rem;">
+    <svg class="icon icon--sm" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    <span>Back to Products</span>
+  </a>
+  <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">Edit <%= product.name %></h1>
+  <p style="color: var(--color-muted);">Update pricing, stock variants, or replace garment photography.</p>
+</div>
+
+<form action="/admin/products/<%= product.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+  <%- include('_form', { isEdit: true, product, categories, formData, errors }) %>
+</form>

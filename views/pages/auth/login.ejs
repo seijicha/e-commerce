@@ -1,0 +1,56 @@
+<h2 style="font-size: 1.5rem; text-align: center; margin-bottom: 0.5rem;">Customer Login</h2>
+<p style="color: var(--color-muted); text-align: center; font-size: 0.9rem; margin-bottom: 2rem;">
+  Access your cart, order history, and account settings.
+</p>
+
+<form action="/login" method="POST">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+  <input type="hidden" name="next" value="<%= typeof nextUrl !== 'undefined' ? nextUrl : '' %>" />
+
+  <div class="form-group">
+    <label for="email" class="form-label">Email Address <span class="required">*</span></label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>"
+      class="form-input <%= (typeof errors !== 'undefined' && errors.email) ? 'form-input--error' : '' %>"
+      required
+      autofocus
+      autocomplete="email"
+    />
+    <% if (typeof errors !== 'undefined' && errors.email) { %>
+      <p class="form-error"><%= errors.email.msg %></p>
+    <% } %>
+  </div>
+
+  <div class="form-group">
+    <label for="password" class="form-label">Password <span class="required">*</span></label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      class="form-input <%= (typeof errors !== 'undefined' && errors.password) ? 'form-input--error' : '' %>"
+      required
+      autocomplete="current-password"
+    />
+    <% if (typeof errors !== 'undefined' && errors.password) { %>
+      <p class="form-error"><%= errors.password.msg %></p>
+    <% } %>
+  </div>
+
+  <button type="submit" class="btn btn--primary btn--block btn--lg" style="margin-top: 1.5rem;">
+    Sign In
+  </button>
+</form>
+
+<div style="margin-top: 2rem; text-align: center; font-size: 0.9rem; color: var(--color-muted); border-top: 1px solid var(--color-border); padding-top: 1.5rem;">
+  Don't have an account yet? <a href="/register">Register now</a>
+</div>
+
+<div style="margin-top: 1rem; text-align: center; font-size: 0.8rem;">
+  <a href="/admin/login" style="color: var(--color-muted); display: inline-flex; align-items: center; gap: 0.35rem;">
+    <span>Administrator Console Login</span>
+    <svg class="icon icon--sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+  </a>
+</div>

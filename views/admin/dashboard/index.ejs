@@ -1,0 +1,117 @@
+<div style="margin-bottom: 2rem;">
+  <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">Console Overview</h1>
+  <p style="color: var(--color-muted);">System telemetry, inventory statuses, and recent store orders.</p>
+</div>
+
+<!-- KPI Stats Grid -->
+<div class="stat-grid">
+  <div class="stat-card">
+    <span class="stat-card__title">Total Products</span>
+    <span class="stat-card__value"><%= stats.totalProducts %></span>
+  </div>
+
+  <div class="stat-card">
+    <span class="stat-card__title">Low Stock Variants (&le; 10)</span>
+    <span class="stat-card__value" style="color: <%= stats.lowStockCount > 0 ? 'var(--color-warning)' : 'var(--color-text)' %>;">
+      <%= stats.lowStockCount %>
+    </span>
+  </div>
+
+  <div class="stat-card">
+    <span class="stat-card__title">Pending Orders</span>
+    <span class="stat-card__value" style="color: <%= stats.ordersByStatus.pending > 0 ? 'var(--color-accent)' : 'var(--color-text)' %>;">
+      <%= stats.ordersByStatus.pending %>
+    </span>
+  </div>
+
+  <div class="stat-card">
+    <span class="stat-card__title">Realized Revenue</span>
+    <span class="stat-card__value" style="color: var(--color-accent-alt);">
+      <%= formatMoney(stats.totalRevenue) %>
+    </span>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+  <!-- Recent Orders Table -->
+  <div class="card">
+    <div class="card__header">
+      <h3 style="font-size: 1.15rem;">Recent Orders</h3>
+      <a href="/admin/orders" class="btn btn--outline btn--sm">View All Orders</a>
+    </div>
+    <div class="card__body">
+      <% if (stats.recentOrders && stats.recentOrders.length > 0) { %>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% stats.recentOrders.forEach(function(order) { %>
+                <tr>
+                  <td style="font-weight: 600;">
+                    <a href="/admin/orders/<%= order.id %>" style="color: var(--color-accent-alt);"><%= order.order_number %></a>
+                  </td>
+                  <td><%= order.shipping_name %></td>
+                  <td><%= formatMoney(order.total) %></td>
+                  <td>
+                    <% if (order.status === 'delivered') { %>
+                      <span class="badge badge--success">Delivered</span>
+                    <% } else if (order.status === 'shipped') { %>
+                      <span class="badge badge--cyan">Shipped</span>
+                    <% } else if (order.status === 'paid') { %>
+                      <span class="badge badge--cyan">Paid</span>
+                    <% } else if (order.status === 'cancelled') { %>
+                      <span class="badge badge--danger">Cancelled</span>
+                    <% } else { %>
+                      <span class="badge badge--warning">Pending</span>
+                    <% } %>
+                  </td>
+                  <td style="text-align: right;">
+                    <a href="/admin/orders/<%= order.id %>" class="btn btn--secondary btn--sm">Review</a>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      <% } else { %>
+        <p style="color: var(--color-muted); padding: 1rem 0;">No orders received yet.</p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Low Stock Alert Box -->
+  <div class="card">
+    <div class="card__header">
+      <h3 style="font-size: 1.15rem;">Low Inventory Warnings</h3>
+    </div>
+    <div class="card__body">
+      <% if (stats.lowStockVariants && stats.lowStockVariants.length > 0) { %>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <% stats.lowStockVariants.forEach(function(item) { %>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; font-size: 0.9rem;">
+              <div>
+                <a href="/admin/products/<%= item.product_id %>/edit" style="font-weight: 600; color: inherit;">
+                  <%= item.product_name %>
+                </a>
+                <p style="font-size: 0.8rem; color: var(--color-muted);">Size: <%= item.size %></p>
+              </div>
+              <span class="badge <%= item.stock === 0 ? 'badge--danger' : 'badge--warning' %>">
+                <%= item.stock %> left
+              </span>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <p style="color: var(--color-muted); padding: 1rem 0;">All product variant stock levels are healthy.</p>
+      <% } %>
+    </div>
+  </div>
+</div>

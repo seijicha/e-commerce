@@ -1,0 +1,93 @@
+<h2 style="font-size: 1.5rem; text-align: center; margin-bottom: 0.5rem;">Join GlitchAttire</h2>
+<p style="color: var(--color-muted); text-align: center; font-size: 0.9rem; margin-bottom: 2rem;">
+  Create an account to start shopping our exclusive drops.
+</p>
+
+<form action="/register" method="POST">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+  <div class="form-group">
+    <label for="name" class="form-label">Full Name <span class="required">*</span></label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      value="<%= typeof formData !== 'undefined' && formData.name ? formData.name : '' %>"
+      class="form-input <%= (typeof errors !== 'undefined' && errors.name) ? 'form-input--error' : '' %>"
+      required
+      autofocus
+    />
+    <% if (typeof errors !== 'undefined' && errors.name) { %>
+      <p class="form-error"><%= errors.name.msg %></p>
+    <% } %>
+  </div>
+
+  <div class="form-group">
+    <label for="email" class="form-label">Email Address <span class="required">*</span></label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>"
+      class="form-input <%= (typeof errors !== 'undefined' && errors.email) ? 'form-input--error' : '' %>"
+      required
+    />
+    <% if (typeof errors !== 'undefined' && errors.email) { %>
+      <p class="form-error"><%= errors.email.msg %></p>
+    <% } %>
+  </div>
+
+  <div class="form-group">
+    <label for="phone" class="form-label">Phone Number (Optional)</label>
+    <input
+      type="tel"
+      id="phone"
+      name="phone"
+      value="<%= typeof formData !== 'undefined' && formData.phone ? formData.phone : '' %>"
+      class="form-input <%= (typeof errors !== 'undefined' && errors.phone) ? 'form-input--error' : '' %>"
+      placeholder="+63 9XX XXX XXXX"
+    />
+    <% if (typeof errors !== 'undefined' && errors.phone) { %>
+      <p class="form-error"><%= errors.phone.msg %></p>
+    <% } %>
+  </div>
+
+  <div class="form-group">
+    <label for="password" class="form-label">Password <span class="required">*</span></label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      class="form-input <%= (typeof errors !== 'undefined' && errors.password) ? 'form-input--error' : '' %>"
+      required
+      minlength="8"
+    />
+    <p class="form-hint">Minimum 8 characters.</p>
+    <% if (typeof errors !== 'undefined' && errors.password) { %>
+      <p class="form-error"><%= errors.password.msg %></p>
+    <% } %>
+  </div>
+
+  <div class="form-group">
+    <label for="passwordConfirmation" class="form-label">Confirm Password <span class="required">*</span></label>
+    <input
+      type="password"
+      id="passwordConfirmation"
+      name="passwordConfirmation"
+      class="form-input <%= (typeof errors !== 'undefined' && errors.passwordConfirmation) ? 'form-input--error' : '' %>"
+      required
+      minlength="8"
+    />
+    <% if (typeof errors !== 'undefined' && errors.passwordConfirmation) { %>
+      <p class="form-error"><%= errors.passwordConfirmation.msg %></p>
+    <% } %>
+  </div>
+
+  <button type="submit" class="btn btn--primary btn--block btn--lg" style="margin-top: 1.5rem;">
+    Create Customer Account
+  </button>
+</form>
+
+<div style="margin-top: 2rem; text-align: center; font-size: 0.9rem; color: var(--color-muted); border-top: 1px solid var(--color-border); padding-top: 1.5rem;">
+  Already registered? <a href="/login">Sign in</a>
+</div>

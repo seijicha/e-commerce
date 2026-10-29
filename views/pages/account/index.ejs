@@ -1,0 +1,35 @@
+<div style="margin-bottom: 2rem;">
+  <h1 style="font-size: 2.25rem; margin-bottom: 0.5rem;">Account Settings</h1>
+  <p style="color: var(--color-muted);">Manage your customer credentials and contact information.</p>
+</div>
+
+<div class="card" style="max-width: 600px;">
+  <div class="card__header">
+    <h3 style="font-size: 1.15rem;">Profile Information</h3>
+  </div>
+  <div class="card__body">
+    <form action="/account?_method=PUT" method="POST">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+      <div class="form-group">
+        <label for="email" class="form-label">Email Address</label>
+        <input type="email" id="email" value="<%= profile.email %>" class="form-input" disabled />
+        <p class="form-hint">Email address cannot be modified once registered.</p>
+      </div>
+
+      <div class="form-group">
+        <label for="name" class="form-label">Full Name <span class="required">*</span></label>
+        <input type="text" id="name" name="name" value="<%= profile.name %>" class="form-input" required />
+      </div>
+
+      <div class="form-group">
+        <label for="phone" class="form-label">Phone Number</label>
+        <input type="tel" id="phone" name="phone" value="<%= profile.phone || '' %>" class="form-input" placeholder="+63 9XX XXX XXXX" />
+      </div>
+
+      <button type="submit" class="btn btn--primary" style="margin-top: 1rem;">
+        Save Changes
+      </button>
+    </form>
+  </div>
+</div>

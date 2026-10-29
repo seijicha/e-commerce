@@ -1,0 +1,84 @@
+<div style="margin-bottom: 2rem;">
+  <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">Orders</h1>
+  <p style="color: var(--color-muted);">Manage customer orders, track lifecycle transitions, and fulfill shipments.</p>
+</div>
+
+<!-- Filters -->
+<form method="GET" action="/admin/orders" class="filter-bar">
+  <div style="display: flex; gap: 0.5rem; flex: 1; min-width: 250px;">
+    <input type="text" name="search" placeholder="Search order #, customer, or email..." value="<%= searchQuery %>" class="form-input" />
+    <button type="submit" class="btn btn--secondary">Search</button>
+  </div>
+
+  <div style="display: flex; gap: 0.75rem;">
+    <select name="status" class="form-select" onchange="this.form.submit()" style="width: auto;">
+      <option value="">All Statuses</option>
+      <option value="pending" <%= activeStatus === 'pending' ? 'selected' : '' %>>Pending</option>
+      <option value="paid" <%= activeStatus === 'paid' ? 'selected' : '' %>>Paid</option>
+      <option value="shipped" <%= activeStatus === 'shipped' ? 'selected' : '' %>>Shipped</option>
+      <option value="delivered" <%= activeStatus === 'delivered' ? 'selected' : '' %>>Delivered</option>
+      <option value="cancelled" <%= activeStatus === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+    </select>
+  </div>
+</form>
+
+<% if (typeof orders !== 'undefined' && orders.length > 0) { %>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Date</th>
+          <th>Customer</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th style="text-align: right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.forEach(function(o) { %>
+          <tr>
+            <td style="font-weight: 700;">
+              <a href="/admin/orders/<%= o.id %>" style="color: var(--color-accent-alt); font-family: var(--font-display);">
+                <%= o.order_number %>
+              </a>
+            </td>
+            <td><%= new Date(o.created_at).toLocaleDateString() %></td>
+            <td>
+              <%= o.shipping_name %>
+              <% if (o.user_email) { %>
+                <p style="color: var(--color-muted); font-size: 0.8rem;"><%= o.user_email %></p>
+              <% } %>
+            </td>
+            <td><%= o.item_count %></td>
+            <td style="font-weight: 600;"><%= formatMoney(o.total) %></td>
+            <td>
+              <% if (o.status === 'delivered') { %>
+                <span class="badge badge--success">Delivered</span>
+              <% } else if (o.status === 'shipped') { %>
+                <span class="badge badge--cyan">Shipped</span>
+              <% } else if (o.status === 'paid') { %>
+                <span class="badge badge--cyan">Paid</span>
+              <% } else if (o.status === 'cancelled') { %>
+                <span class="badge badge--danger">Cancelled</span>
+              <% } else { %>
+                <span class="badge badge--warning">Pending</span>
+              <% } %>
+            </td>
+            <td style="text-align: right;">
+              <a href="/admin/orders/<%= o.id %>" class="btn btn--outline btn--sm">Manage</a>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+
+  <%- include('../../partials/pagination', { pagination, searchQuery, activeStatus }) %>
+<% } else { %>
+  <div style="text-align: center; padding: 4rem 1rem; background-color: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
+    <h3 style="margin-bottom: 0.5rem;">No orders found</h3>
+    <p style="color: var(--color-muted);">No orders match the current filter parameters.</p>
+  </div>
+<% } %>

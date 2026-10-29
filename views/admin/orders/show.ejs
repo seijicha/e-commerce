@@ -1,0 +1,129 @@
+<div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+  <div>
+    <a href="/admin/orders" class="btn btn--secondary btn--sm" style="margin-bottom: 0.75rem; display: inline-flex; align-items: center; gap: 0.35rem;">
+      <svg class="icon icon--sm" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span>Back to Orders</span>
+    </a>
+    <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">Order #<%= order.order_number %></h1>
+    <p style="color: var(--color-muted);">Placed on <%= new Date(order.created_at).toLocaleString() %></p>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 1rem;">
+    <!-- Status Transition Form -->
+    <form action="/admin/orders/<%= order.id %>/status?_method=PATCH" method="POST" style="display: flex; align-items: center; gap: 0.5rem;">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <label for="status" class="form-label" style="margin: 0; white-space: nowrap;">Change Status:</label>
+      <select name="status" id="status" class="form-select" style="width: auto;">
+        <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Pending</option>
+        <option value="paid" <%= order.status === 'paid' ? 'selected' : '' %>>Paid</option>
+        <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
+        <option value="delivered" <%= order.status === 'delivered' ? 'selected' : '' %>>Delivered</option>
+        <option value="cancelled" <%= order.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+      </select>
+      <button type="submit" class="btn btn--primary btn--sm">Update</button>
+    </form>
+  </div>
+</div>
+
+<div class="checkout-grid">
+  <!-- Line Items -->
+  <div>
+    <div class="card">
+      <div class="card__header">
+        <h3 style="font-size: 1.15rem;">Ordered Garments (<%= order.items.length %>)</h3>
+      </div>
+      <div class="card__body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Size</th>
+                <th>Unit Price</th>
+                <th>Qty</th>
+                <th style="text-align: right;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% order.items.forEach(function(item) { %>
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                      <% if (item.image_path) { %>
+                        <img src="<%= item.image_path %>" alt="<%= item.product_name %>" style="width: 44px; height: 50px; object-fit: cover; border-radius: var(--radius-sm);" />
+                      <% } %>
+                      <span style="font-weight: 600;"><%= item.product_name %></span>
+                    </div>
+                  </td>
+                  <td><span class="badge badge--neutral"><%= item.size %></span></td>
+                  <td><%= formatMoney(item.unit_price) %></td>
+                  <td><%= item.quantity %></td>
+                  <td style="text-align: right; font-weight: 600; color: var(--color-accent-alt);">
+                    <%= formatMoney(item.unit_price * item.quantity) %>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer & Shipping Snapshot -->
+  <div>
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <div class="card__header">
+        <h3 style="font-size: 1.15rem;">Recipient & Shipping</h3>
+      </div>
+      <div class="card__body" style="line-height: 1.6; font-size: 0.95rem;">
+        <p><strong style="color: var(--color-text);"><%= order.shipping_name %></strong></p>
+        <p style="color: var(--color-muted);"><%= order.shipping_phone %></p>
+        <% if (order.user_email) { %>
+          <p style="color: var(--color-muted);">Customer Account: <%= order.user_email %></p>
+        <% } %>
+        <p style="color: var(--color-muted); margin-top: 0.75rem;"><%= order.shipping_address %></p>
+        <p style="color: var(--color-muted);"><%= order.shipping_city %>, <%= order.shipping_postal_code %></p>
+        <p style="color: var(--color-muted);"><%= order.shipping_country || 'Philippines' %></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <h3 style="font-size: 1.15rem;">Financial Breakdown</h3>
+      </div>
+      <div class="card__body" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <%
+          const paymentLabels = {
+            cod: 'Cash on Delivery (COD)',
+            gcash: 'GCash e-Wallet',
+            bank_transfer: 'Direct Bank Transfer'
+          };
+          const paymentLabel = paymentLabels[order.payment_method] || order.payment_method.toUpperCase();
+        %>
+        <div style="display: flex; justify-content: space-between; color: var(--color-muted);">
+          <span>Subtotal</span>
+          <span style="color: var(--color-text); font-weight: 600;"><%= formatMoney(order.subtotal || order.total) %></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; color: var(--color-muted);">
+          <span>Payment Mode</span>
+          <span style="color: var(--color-text); font-weight: 600;"><%= paymentLabel %></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; color: var(--color-muted);">
+          <span>Shipping Fee</span>
+          <% if (parseFloat(order.shipping_fee) > 0) { %>
+            <span style="color: var(--color-text); font-weight: 600;"><%= formatMoney(order.shipping_fee) %></span>
+          <% } else { %>
+            <span style="color: var(--color-success); font-weight: 600;">FREE</span>
+          <% } %>
+        </div>
+        <div style="border-top: 1px solid var(--color-border); padding-top: 0.75rem; display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font-weight: 600;">Total Amount</span>
+          <span style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--color-accent-alt);">
+            <%= formatMoney(order.total) %>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

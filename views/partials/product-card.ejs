@@ -1,0 +1,44 @@
+<div class="product-card">
+  <a href="/shop/<%= product.slug %>" class="product-card__image-wrap">
+    <% if (product.image_path) { %>
+      <img src="<%= product.image_path %>" alt="<%= product.name %>" class="product-card__image" loading="lazy" />
+    <% } else { %>
+      <div class="product-card__placeholder">
+        <span>NO PREVIEW</span>
+      </div>
+    <% } %>
+  </a>
+
+  <div class="product-card__content">
+    <div class="product-card__meta-row">
+      <% if (product.category_name) { %>
+        <span class="product-card__category"><%= product.category_name %></span>
+      <% } %>
+      <div class="product-card__rating" aria-label="5 out of 5 stars">
+        <span class="product-card__stars">
+          <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg class="icon icon--sm icon--gold" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </span>
+        <span class="product-card__rating-val">(5.0)</span>
+      </div>
+    </div>
+
+    <h3 class="product-card__title">
+      <a href="/shop/<%= product.slug %>"><%= product.name %></a>
+    </h3>
+
+    <div class="product-card__swatches">
+      <span class="swatch-dot swatch-dot--purple" title="Nocturnal Violet"></span>
+      <span class="swatch-dot swatch-dot--black" title="Obsidian Black"></span>
+      <span class="swatch-dot swatch-dot--charcoal" title="Washed Charcoal"></span>
+    </div>
+
+    <div class="product-card__footer">
+      <span class="product-card__price"><%= formatMoney(product.price) %></span>
+      <a href="/shop/<%= product.slug %>" class="btn btn--outline btn--sm">View Piece</a>
+    </div>
+  </div>
+</div>
